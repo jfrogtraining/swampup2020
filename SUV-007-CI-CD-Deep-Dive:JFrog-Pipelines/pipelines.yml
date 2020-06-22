@@ -3,6 +3,177 @@ resources:
     type: GitRepo
     configuration:
       gitProvider: Github_SolEng
-      path: jfrogtraining/pipelines_swampup2020
+      path: jfrogtraining/swampup2020
       branches:
-        include: training
+        include: master
+  - name: DockerAppImage
+    type: Image
+    configuration:
+      registry: artifactory
+      sourceRepository: docker
+      imageName: ${(echo ${int_artifactory_url}|awk -F '/' '{print $3}')}/docker/swampup_docker_app_demo #docker.artifactory-unified.soleng-us.jfrog.team/swampup_docker_app_demo
+      imageTag: '${run_number}'
+      autoPull: true
+  - name: myBuildInfo
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: artifactory
+      buildName: SampleApp
+      buildNumber: 1
+  - name: myPromotedBuildInfo
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: artifactory
+      buildName: SampleApp
+      buildNumber: 1
+  - name: myHelmBuildInfo
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: artifactory
+      buildName: SampleApp
+      buildNumber: 1
+  - name: myPromotedHelmBuildInfo
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: artifactory
+      buildName: SampleApp
+      buildNumber: 1
+  - name: MyHelmChart
+    type: HelmChart
+    configuration:
+      sourceArtifactory: artifactory
+      repository: helm-local
+      chart: docker-app-chart
+      version: '0.1.${run_number}'
+  - name: MyPromotedHelmChart
+    type: HelmChart
+    configuration:
+      sourceArtifactory: artifactory
+      repository: helm-prod-local
+      chart: docker-app-chart
+      version: '0.1.${run_number}'
+  - name: myReleaseBundle
+    type: ReleaseBundle
+    configuration:
+      sourceDistribution: distribution
+      name: swampup_rb
+      version: v1.0.0
+  - name: mySignedReleaseBundle
+    type: ReleaseBundle
+    configuration:
+      sourceDistribution: distribution
+      name: swampup_rb
+      version: v1.0.0
+  - name: myDistributionRules
+    type: DistributionRule
+    configuration:
+      sourceDistribution: distribution
+      serviceName: "Edge*"
+      siteName: "Edge*"
+      cityName: "*"
+      countryCodes:
+        - "*"
+pipelines:
+  - name: swampup_docker_app_pipeline
+    configuration:
+      environmentVariables:
+        readOnly:
+           my_env_var: '1.0.$run_number'
+           ArtIP: $(echo ${int_artifactory_url}|awk -F '/' '{print $3}')
+    steps:
+      - name: bld_backend
+        type: MvnBuild
+        configuration:
+          sourceLocation: SUV-007-CI-CD-Deep-Dive:JFrog-Pipelines/java-backend-service
+          mvnCommand: clean install -ntp
+          configFileLocation: .
+          configFileName: mvn-art-config
+          inputResources:
+            - name: myGitRepo
+              trigger: false
+          integrations:
+            - name: artifactory
+          runtime:
+            type: image
+            image:
+              auto:
+                language: java
+                versions:
+                  - "11"
+        execution:
+          onStart:
+            - javac -version
+            - mvn --version
+            - add_pipeline_variables previous_backend_ver=${my_env_var}
+            - sed -ie 's/Default-Server/artifactory/g' $res_myGitRepo_resourcePath/SUV-007-CI-CD-Deep-Dive:JFrog-Pipelines/java-backend-service/mvn-art-config
+            - sed -ie "s/1.0.0/$my_env_var/g" $res_myGitRepo_resourcePath/SUV-007-CI-CD-Deep-Dive:JFrog-Pipelines/java-backend-service/pom.xml
+          onComplete:
+            - echo $run_var
+            - echo "Running $pipeline_name | $step_name on node ID $step_node_id"
+      - name: bld_frontend
+        type: NpmBuild
+        configuration:
+          npmArgs: --no-progress --no-audit
+          sourceLocation: npm-frontend-service
+          repositoryName: npm
+          inputResources:
+            - name: myGitRepo
+              trigger: false
+          integrations:
+            - name: artifactory
+        execution:
+          onStart:
+            - add_pipeline_variables previous_frontend_ver=${my_env_var}
+            - sed -i "s/3.0.0/$my_env_var/g" $res_myGitRepo_resourcePath/SUV-007-CI-CD-Deep-Dive:JFrog-Pipelines/npm-frontend-service/package.json     
+      - name: publish_frontend
+        type: NpmPublish
+        configuration:
+          repositoryName: npm
+          inputSteps:
+            - name: bld_frontend
+          integrations:
+            - name: artifactory
+      - name: bld_docker_app
+        type: DockerBuild
+        configuration:
+          affinityGroup: fmkGroup
+          dockerFileLocation: SUV-007-CI-CD-Deep-Dive:JFrog-Pipelines/
+          dockerFileName: Dockerfile
+          dockerImageName: ${ArtIP}/docker/swampup_docker_app_demo
+          dockerImageTag: '${run_number}'
+          integrations:
+            - name: artifactory
+          inputResources:
+            - name: myGitRepo
+              trigger: false
+          outputResources:
+            - name: DockerAppImage
+          inputSteps:
+            - name: bld_backend
+            - name: publish_frontend #bld_frontend
+        execution:
+          onStart:
+            - add_run_variables url=${ArtIP}/docker
+            - add_run_variables old=docker.artifactory
+            - echo $url
+            - sed -i "s|$old|$url|g" $res_myGitRepo_resourcePath/SUV-007-CI-CD-Deep-Dive:JFrog-Pipelines/Dockerfile
+            - sed -i "s/artifactory-unified.soleng-us.jfrog.team/${ArtIP}/" $res_myGitRepo_resourcePath/SUV-007-CI-CD-Deep-Dive:JFrog-Pipelines/Dockerfile
+            - sed -i "s/frontend-3.0.0/frontend-$previous_frontend_ver/g" $res_myGitRepo_resourcePath/SUV-007-CI-CD-Deep-Dive:JFrog-Pipelines/Dockerfile
+            - sed -i "s/1.0.0/$previous_backend_ver/g" $res_myGitRepo_resourcePath/SUV-007-CI-CD-Deep-Dive:JFrog-Pipelines/Dockerfile
+            - cat $res_myGitRepo_resourcePath/SUV-007-CI-CD-Deep-Dive:JFrog-Pipelines/Dockerfile
+          onComplete:
+            - echo $step_env_var2
+            - echo "Running $pipeline_name | $step_name on node ID $step_node_id"
+      - name: push_docker_app
+        type: DockerPush
+        configuration:
+          affinityGroup: fmkGroup
+          targetRepository: docker
+          forceXrayScan: true
+          autoPublishBuildInfo: true
+          integrations:
+            - name: artifactory
+          inputSteps:
+            - name: bld_docker_app
+          outputResources:
+            - name: myBuildInfo
