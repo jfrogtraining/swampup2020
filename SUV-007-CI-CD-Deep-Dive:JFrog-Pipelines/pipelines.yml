@@ -114,7 +114,7 @@ pipelines:
         type: NpmBuild
         configuration:
           npmArgs: --no-progress --no-audit
-          sourceLocation: npm-frontend-service
+          sourceLocation: SUV-007-CI-CD-Deep-Dive:JFrog-Pipelines/npm-frontend-service
           repositoryName: npm
           inputResources:
             - name: myGitRepo
