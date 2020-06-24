@@ -1,0 +1,12 @@
+{
+    "repo" : {
+      "repositories": ["gradle-prod-local","docker-prod-local","tomcat-local","helm-local"],
+      "actions": {
+          "groups" : {
+            "dev-team" : ["read"],
+            "release-team" : ["write","annotate", "read","managedXrayMeta"],
+            "delivery-team" : ["read","annotate"]
+          }
+      }
+    }
+  }

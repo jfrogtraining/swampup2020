@@ -1,0 +1,24 @@
+  {
+    "repo" : {
+      "repositories": ["gradle-dev-local","jcenter","docker-dev-local","docker-remote","helm-local","helm-remote"],
+      "actions": {
+          "groups" : {
+            "dev-team" : ["write","annotate", "read"],
+            "release-team" : ["delete","annotate", "read","managedXrayMeta"] 
+          }
+      }
+    },
+    "build" : {
+      "include-patterns" : ["gradle/**","docker-framework/**","docker-app/**","helm-build/**"],
+      "repositories": ["artifactory-build-info"],
+      "actions": {
+        "groups" : {
+          "dev-team" : ["read","annotate","write"],
+          "release-team" : ["read","annotate","write"],
+          "security-team" : ["read","annotate","write","managedXrayMeta"],
+          "delivery-team" : ["read"]
+        }
+      }
+    }
+    
+  }

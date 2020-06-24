@@ -1,0 +1,11 @@
+{
+    "repo" : {
+      "repositories": ["gradle-staging-local","docker-staging-local"],
+      "actions": {
+          "groups" : {
+            "dev-team" : ["read"],
+            "release-team" : ["delete","write","annotate", "read","managedXrayMeta"] 
+          }
+      }
+    }
+  }

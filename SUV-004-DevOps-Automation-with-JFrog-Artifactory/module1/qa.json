@@ -1,0 +1,7 @@
+{   
+    "password": "password31",
+    "admin": false,
+    "profileUpdatable": true,
+    "groups" : [ "readers", "release-team","security-team" ],
+    "email" : "null@jfrog.com"
+}
