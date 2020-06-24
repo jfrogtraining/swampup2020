@@ -1,1 +1,1 @@
-# SwampUp 2020 Pipelines
+# SwampUp 2020 Automation
