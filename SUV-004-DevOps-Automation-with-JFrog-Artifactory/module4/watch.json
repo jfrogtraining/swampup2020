@@ -1,0 +1,54 @@
+{
+    "general_data": {
+        "name": "global",
+        "description": "this watch is for demo",
+        "active": true
+    },
+    "project_resources": {
+        "resources": [
+            {
+                "type": "repository",
+                "bin_mgr_id": "default",
+                "name": "jcenter",
+                "repo_type": "remote"
+            },
+            {
+                "type": "repository",
+                "bin_mgr_id": "default",
+                "name": "docker-remote",
+                "repo_type": "remote"
+            },
+            {
+                "type": "repository",
+                "bin_mgr_id": "default",
+                "name": "docker-prod-local",
+                "repo_type": "local"
+            },
+            {
+                "type": "build",
+                "bin_mgr_id": "default",
+                "name": "gradle"
+            },
+            {
+                "type": "build",
+                "bin_mgr_id": "default",
+                "name": "docker-framework"
+            },
+            {
+                "type": "build",
+                "bin_mgr_id": "default",
+                "name": "docker-app"
+            }
+        ]
+    },
+    "assigned_policies": [
+        {
+            "name": "highRisk",
+            "type": "security"
+        },
+        {
+            "name": "gpl",
+            "type": "license"
+        }
+    ]
+}

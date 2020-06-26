@@ -1,0 +1,11 @@
+{
+    "files": [
+      {
+        "pattern": "docker-prod-local/jfrog-docker-app/1/**"
+      },
+      {
+        "pattern":"helm-local/**",
+        "props":"build.name=helm-build;build.number=${BUILD_NUMBER}"
+      }
+    ]
+  }

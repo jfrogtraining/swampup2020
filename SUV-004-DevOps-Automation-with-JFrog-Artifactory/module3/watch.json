@@ -1,0 +1,44 @@
+{
+    "general_data": {
+        "name": "demo",
+        "description": "this watch is for demo",
+        "active": true
+    },
+    "project_resources": {
+        "resources": [
+            {
+                "type": "repository",
+                "bin_mgr_id": "default",
+                "name": "gradle-dev-local",
+                "repo_type": "local"
+            },
+            {
+                "type": "repository",
+                "bin_mgr_id": "default",
+                "name": "jcenter",
+                "repo_type": "remote"
+            },
+            {
+                "type": "build",
+                "bin_mgr_id": "default",
+                "name": "gradle"
+            },
+            {
+                "type": "build",
+                "bin_mgr_id": "default",
+                "name": "docker-app"
+            },
+            {
+                "type": "build",
+                "bin_mgr_id": "default",
+                "name": "docker-framework"
+            }
+        ]
+    },
+    "assigned_policies": [
+        {
+            "name": "demo-security",
+            "type": "security"
+        }
+    ]
+}

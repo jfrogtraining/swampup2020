@@ -1,0 +1,11 @@
+items.find ({
+        "type":"file",
+        "stat.downloaded":{"$last":"1mo"},
+        "$or":[
+            {"name":{"$match":"*.jar"}},
+            {"name":{"$match":"*.war"}}
+        ]
+})
+.include ("repo","path","name", "size", "artifact.module.build.name", "artifact.module.build.number", "created","stat.downloads", "stat.downloaded") 
+.sort({"$asc":["stat.downloads"]})
+.limit(100)
