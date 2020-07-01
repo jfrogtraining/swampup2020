@@ -1,0 +1,7 @@
+{   
+    "password": "chaysinh",
+    "admin": false,
+    "profileUpdatable": true,
+    "groups" : [ "ninja-reader", "ninja-delivery" ],
+    "email" : "null@jfrog.com"
+}

@@ -1,0 +1,44 @@
+{
+  "repo": {
+    "repositories": [
+      "ninja-jcenter-remote",
+      "ninja-mvn-rc-local",
+      "ninja-mvn-snapshot-local",
+      "ninja-npm-dev-local",
+      "ninja-npmjs-remote"
+    ],
+    "actions": {
+      "groups": {
+        "ninja-dev": [
+          "read",
+          "write",
+          "delete",
+          "annotate",
+          "managedXrayMeta"
+        ]
+      }
+    }
+  },
+  "build": {
+    "include-patterns": [
+      "maven/**",
+      "docker-framework/**",
+      "docker-app/**",
+      "helm-build/**"
+    ],
+    "repositories": [
+      "artifactory-build-info"
+    ],
+    "actions": {
+      "groups": {
+        "ninja-dev": [
+          "read",
+          "write",
+          "annotate",
+          "delete",
+          "managedXrayMeta"
+        ]
+      }
+    }
+  }
+}

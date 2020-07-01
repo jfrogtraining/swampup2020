@@ -1,0 +1,23 @@
+{
+    "rclass" : "remote",
+    "packageType" : "maven",
+    "description" : "",
+    "includesPattern" : "**/*",
+    "excludesPattern" : "",
+    "repoLayoutRef" : "maven-2-default",
+    "url" : "https://jcenter.bintray.com",
+    "username" : "",
+    "password" : "",
+    "handleReleases" : true,
+    "handleSnapshots" : true,
+    "suppressPomConsistencyChecks" : true,
+    "remoteRepoChecksumPolicyType" : "generate-if-absent",
+    "fetchJarsEagerly" : false,
+    "fetchSourcesEagerly" : false,
+    "shareConfiguration" : false,
+    "synchronizeProperties" : false,
+    "maxUniqueSnapshots" : 0,
+    "maxUniqueTags" : 0,
+    "propertySets" : [ "artifactory" ]
+    
+  }

@@ -1,0 +1,63 @@
+# This is a basic workflow to help you get started with Actions
+
+name: python-githubaction
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ '3.x' ]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+        
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+        
+      - name: Setup JFrog CLI
+        uses: jfrog/setup-jfrog-cli@v1
+        env:
+          JF_ARTIFACTORY_SERVER: ${{ secrets.JF_ARTIFACTORY_SERVER_1 }}
+
+      - name: Install wheel
+        run: pip install wheel
+
+      - name: Ping Artifactory
+        run: |
+            jfrog rt ping
+            jfrog rt c show
+            
+      - name: Configure CLI  
+        run: jfrog rt pipc --repo-resolve asgardian-python --server-id-resolve yannaws
+
+      - name: Build & Package
+        run:  |
+          jfrog rt pipi -r requirements.txt --no-cache-dir --force-reinstall --build-name=$JFROG_CLI_BUILD_NAME --build-number=$JFROG_CLI_BUILD_NUMBER --module=demo 
+          python setup.py sdist bdist_wheel -d build/ 
+      - name: Publish artifact
+        run: jfrog rt u build/ asgardian-python/ --build-name=$JFROG_CLI_BUILD_NAME --build-number=$JFROG_CLI_BUILD_NUMBER --module=demo
+        
+      - name: Publish Build Info
+        run: |
+            # Collect environment variables for the build
+            jfrog rt bce $JFROG_CLI_BUILD_NAME $JFROG_CLI_BUILD_NUMBER
+            
+            # Collect VCS details from git and add them to the build
+            jfrog rt bag $JFROG_CLI_BUILD_NAME $JFROG_CLI_BUILD_NUMBER
+            
+            # Publish build info
+            jfrog rt bp $JFROG_CLI_BUILD_NAME $JFROG_CLI_BUILD_NUMBER
+      - name: Scan Build Info
+        run: jfrog rt bs $JFROG_CLI_BUILD_NAME $JFROG_CLI_BUILD_NUMBER

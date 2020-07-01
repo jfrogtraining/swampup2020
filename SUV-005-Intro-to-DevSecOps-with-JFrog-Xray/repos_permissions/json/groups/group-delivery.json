@@ -1,0 +1,6 @@
+{
+    "description" : "The development team group",
+    "autoJoin" : false,
+    "watchManager": true,
+    "policyManager": false
+}

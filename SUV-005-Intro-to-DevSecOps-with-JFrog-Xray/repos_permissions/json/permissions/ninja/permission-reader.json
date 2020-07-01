@@ -1,0 +1,59 @@
+{
+  "repo": {
+    "repositories": [
+      "ninja-jcenter-remote",
+      "ninja-mvn-prod-local",
+      "ninja-mvn-ppr-local",
+      "ninja-mvn-uat-local",
+      "ninja-mvn-release-local",
+      "ninja-mvn-rc-local",
+      "ninja-mvn-snapshot-local",
+      "ninja-npmjs-remote",
+      "ninja-npm-dev-local",
+      "ninja-npm-release-local"
+    ],
+    "actions": {
+      "groups": {
+        "ninja-reader": [
+          "read"
+        ],
+        "ninja-dev": [
+          "read"
+        ],
+        "ninja-delivery": [
+          "read"
+        ],
+        "security": [
+          "read"
+        ],
+        "ops": [
+          "read"
+        ]
+      }
+    }
+  },
+  "build": {
+    "repositories": [
+      "artifactory-build-info"
+    ],
+    "actions": {
+      "groups": {
+        "ninja-reader": [
+          "read"
+        ],
+        "ninja-dev": [
+          "read"
+        ],
+        "ninja-delivery": [
+          "read"
+        ],
+        "security": [
+          "read"
+        ],
+        "ops": [
+          "read"
+        ]
+      }
+    }
+  }
+}

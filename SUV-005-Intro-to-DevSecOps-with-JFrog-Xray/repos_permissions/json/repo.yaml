@@ -1,0 +1,203 @@
+localRepositories:
+  ninja-mvn-prod-local:
+      type: maven 
+      description: "production deployment"
+      handleReleases: true 
+      handleSnapshots: false 
+      xray:
+        enabled: true
+  ninja-mvn-ppr-local:
+      type: maven 
+      description: "prep production deployment"
+      handleReleases: true 
+      handleSnapshots: false 
+      xray:
+        enabled: true
+  ninja-mvn-uat-local:
+      type: maven 
+      description: "UAT deployment"
+      handleReleases: true 
+      handleSnapshots: false 
+      xray:
+        enabled: true
+  ninja-mvn-release-local:
+      type: maven 
+      description: "ready for ops"
+      handleReleases: true 
+      handleSnapshots: false 
+      xray:
+        enabled: true
+  ninja-mvn-rc-local:
+      type: maven 
+      description: "dev test deployment"
+      handleReleases: true 
+      handleSnapshots: false 
+      xray:
+        enabled: true
+  ninja-mvn-snapshot-local:
+      type: maven 
+      description: "for dev only "
+      handleReleases: true 
+      handleSnapshots: true 
+      xray:
+        enabled: true
+  ninja-npm-dev-local:
+      type: npm 
+      repoLayout: npm-default
+      description: "npm development repo"
+      xray:
+        enabled: true
+  ninja-npm-release-local:
+      type: npm 
+      repoLayout: npm-default
+      description: "npm release repo"
+      xray:
+        enabled: true
+  tomcat-local:
+      type: generic
+      description: "approved copy"
+      repoLayout: simple-default
+      xray:
+        enabled: true
+  ninja-docker-dev-local:
+      type: docker
+      repoLayout: simple-default
+      description: "docker development repo"
+      xray:
+        enabled: true
+  ninja-docker-uat-local:
+      type: docker
+      repoLayout: simple-default
+      description: "production deployment"
+      xray:
+        enabled: true
+  ninja-docker-prod-local:
+      type: docker
+      repoLayout: simple-default
+      description: "staging deployment"
+      xray:
+        enabled: true
+  asgardian-python-dev-local:
+      type: pypi 
+      repoLayout: simple-default
+      description: "dev deployment"
+      xray:
+        enabled: true
+  asgardian-python-uat-local:
+      type: pypi 
+      repoLayout: simple-default
+      description: "uat deployment"
+      xray:
+        enabled: true
+  asgardian-python-prod-local:
+      type: pypi 
+      repoLayout: simple-default
+      description: "prod deployment"
+      xray:
+        enabled: true
+  libs-release-local:
+      type: maven
+      repoLayout: maven-2-default
+      description: "maven release libraries"
+      xray:
+        enabled: true
+  helm-local:
+      type: helm
+      repoLayout: simple-default
+      description: "helm local "
+      xray:
+        enabled: true
+  generic-local:
+      type: generic
+      repoLayout: simple-default
+      description: "generic local"
+      xray:
+        enabled: true
+remoteRepositories:
+  ninja-dockerhub-remote:
+      type: docker
+      url: https://registry-1.docker.io
+      repoLayout: simple-default
+      xray:
+        enabled: true
+      enableTokenAuthentication: true
+  ninja-jcenter-remote:
+      type: maven
+      url: https://jcenter.bintray.com
+      repoLayout: maven-2-default
+      xray:
+        enabled: true
+  ninja-npmjs-remote:
+      type: npm 
+      url: https://registry.npmjs.org
+      repoLayout: npm-default
+      xray:
+        enabled: true
+  asgardian-pypi-remote:
+      type: pypi 
+      url: https://files.pythonhosted.org 
+      repoLayout: simple-default
+      xray:
+        enabled: true
+  helm-remote:
+      type: helm
+      url: https://storage.googleapis.com/kubernetes-charts
+      repoLayout: simple-default
+      xray:
+        enabled: true
+virtualRepositories:
+  ninja-mvn:
+      type: maven
+      repositories:
+        - ninja-mvn-prod-local
+        - ninja-mvn-ppr-local
+        - ninja-mvn-uat-local
+        - ninja-mvn-release-local
+        - ninja-mvn-rc-local
+        - ninja-mvn-snapshot-local
+        - ninja-jcenter-remote
+      description: "maven virtual repositories"
+      defaultDeploymentRepo: ninja-mvn-rc-local
+  ninja-mvn-dev:
+      type: maven
+      repositories:
+        - ninja-mvn-prod-local
+        - ninja-mvn-ppr-local
+        - ninja-mvn-uat-local
+        - ninja-mvn-release-local
+        - ninja-mvn-rc-local
+        - ninja-mvn-snapshot-local
+        - ninja-jcenter-remote
+      description: "maven virtual repositories"
+      defaultDeploymentRepo: ninja-mvn-snapshot-local
+  ninja-docker:
+      type: docker
+      repositories:
+        - ninja-dockerhub-remote
+        - ninja-docker-dev-local
+        - ninja-docker-uat-local
+        - ninja-docker-prod-local
+      description: "docker virtual"
+      defaultDeploymentRepo: ninja-docker-dev-local
+  ninja-npm:
+      type: npm 
+      repositories:
+        - ninja-npmjs-remote
+        - ninja-npm-dev-local
+        - ninja-npm-release-local
+      description: "npm virtual"
+      defaultDeploymentRepo: ninja-npm-dev-local
+  asgardian-python:
+      type: pypi 
+      repositories:
+        - asgardian-pypi-remote
+        - asgardian-python-dev-local
+        - asgardian-python-uat-local
+        - asgardian-python-prod-local
+  helm-virtual:
+      type: helm
+      repositories:
+        - helm-local
+        - helm-remote
+      description: "helm virtual"
+      defaultDeploymentRepo: helm-local

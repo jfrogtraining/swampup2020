@@ -1,0 +1,122 @@
+pipelines:
+  - name: app_mvn_pipeline
+    steps:
+      - name: build_app_mvn_backend
+        type: MvnBuild
+        configuration: 
+          mvnCommand:  clean package
+          sourceLocation:       complete/  #required
+          configFileLocation:   CI  #required
+          configFileName:       mvn-art-config  #required
+          forceXrayScan:        false #optional
+          autoPublishBuildInfo: false #optional
+          inputResources:
+            - name: src_code_back_app
+          integrations:
+            - name: artifactory
+        execution:
+          onStart:
+            - echo  "Preparing for work..."
+          onSuccess:
+            - echo ${res_src_code_back_app_isGitTag}
+            - appVersion=`if [[ ${res_src_code_back_app_isGitTag} == "True" ]]; then echo ${res_src_code_back_app_gitTagName}; else echo ${res_src_code_back_app_commitSha}; fi`
+            - echo $appVersion
+            - add_pipeline_variables appVersion="${appVersion}"
+            - add_pipeline_variables subPath="${res_src_code_back_app_branchName}/${appVersion}"      
+          onFailure:
+            - echo "You Lose"
+          onComplete: #always
+            - echo "Leave it as you found it. Let's clean it"
+
+      - name: publish_backend_buildinfo
+        type: PublishBuildInfo
+        configuration:
+          inputSteps:
+            - name: build_app_mvn_backend
+          outputResources:
+            - name: back_appBuildInfo
+        execution:
+          onStart:
+            - echo "Preparing for Xray scan..."
+          onSuccess:
+            - echo build name / build number ${res_back_appBuildInfo_buildName} ${res_back_appBuildInfo_buildNumber}
+          onFailure:
+            - echo "uh oh, something went wrong"
+          onComplete: #always
+            - echo "Cleaning up some stuff"
+      
+      - name: xray_scan_mvn_backapp
+        type: Bash
+        configuration:
+          integrations:
+            - name: artifactory
+#          affinityGroup: together
+          inputResources:
+            - name: back_appBuildInfo
+          outputResources:
+            - name: back_appBuildInfo_scanned
+        execution:
+          onStart:
+            - echo ${res_back_appBuildInfo_buildName}
+            - echo ${res_back_appBuildInfo_buildNumber}
+            - jfrog rt bs ${res_back_appBuildInfo_buildName} ${res_back_appBuildInfo_buildNumber} --fail=false
+            - write_output back_appBuildInfo_scanned myversion=${appVersion}
+
+  - name: app_docker_pipeline
+    steps:
+      - name: build_docker_backapp
+        type: DockerBuild
+        configuration:
+          affinityGroup: swampup
+          dockerFileName: Dockerfile
+          dockerFileLocation: complete/CI/Docker/
+          dockerImageName: '${ArtIP}/ninja-docker/backapp'
+          dockerImageTag: '${res_back_appBuildInfo_scanned_myversion}-${res_src_dockerfile_back_app_commitSha}'
+          inputResources:
+            - name: src_dockerfile_back_app
+            - name: back_appBuildInfo_scanned
+            - name: back_app_exec
+          integrations:
+            - name: artifactory
+            # - name: docker_registry
+        execution:
+          onStart:
+            - 'export ArtIP=$(echo ${int_artifactory_url}|awk -F ''/'' ''{print $3}'')'
+            - add_pipeline_variables appVersion="${res_back_appBuildInfo_scanned_myversion}"
+            - add_pipeline_variables triggerBuildInfoName="${res_build_info_back_app_promoted_staging_buildName}"
+            - add_pipeline_variables triggerBuildInfoNumber="${res_build_info_back_app_promoted_staging_buildNumber}"
+            - sed -i "s/registry/${ArtIP}/g" ${res_src_dockerfile_back_app_resourcePath}/complete/CI/Docker/Dockerfile
+            - add_pipeline_variables myDockerTag="${appVersion}-${res_src_dockerfile_back_app_commitSha}"
+          onSuccess:
+            - echo "Job well done!"
+
+      - name: publish_docker_backapp
+        type: DockerPush
+        configuration:
+          affinityGroup: swampup
+          targetRepository: ninja-docker
+          autoPublishBuildInfo: true
+          inputSteps:
+            - name: build_docker_backapp
+          integrations:
+            - name: artifactory
+          outputResources:
+            - name: build_info_docker_backapp
+        execution:
+          onSuccess:
+            - echo "Job well done!"
+            - echo $appVersion
+
+      - name: xray_scan_docker_build_info_backapp
+        type: Bash
+        configuration:
+          integrations:
+            - name: artifactory
+          affinityGroup: swampup
+          inputResources:
+            - name: build_info_docker_backapp
+        execution:
+          onStart:
+            - echo ${res_build_info_docker_backapp_buildName}
+            - echo ${res_build_info_docker_backapp_buildNumber}
+            - jfrog rt bs ${res_build_info_docker_backapp_buildName} ${res_build_info_docker_backapp_buildNumber} --fail=false

@@ -1,0 +1,8 @@
+{
+    "rclass" : "virtual",
+    "packageType": "maven",
+    "description": "My virtual repository for java",
+    "repositories": ["ninja-mvn-prod-local","ninja-mvn-ppr-local", "ninja-mvn-uat-local", "ninja-mvn-release-local", "ninja-mvn-rc-local", "ninja-mvn-snapshot-local", "ninja-jcenter-remote"],
+    "artifactoryRequestsCanRetrieveRemoteArtifacts": false,
+    "defaultDeploymentRepo": "ninja-mvn-snapshot-local"
+}

@@ -1,0 +1,39 @@
+{
+  "repo": {
+    "repositories": [
+      "ninja-mvn-prod-local",
+      "ninja-mvn-ppr-local",
+      "ninja-mvn-uat-local",
+      "ninja-mvn-release-local",
+      "ninja-mvn-rc-local",
+      "ninja-mvn-snapshot-local",
+      "asgardian-python-prod-local",
+      "asgardian-python-uat-local",
+      "asgardian-python-dev-local",
+      "asgardian-pypi-remote"
+    ],
+    "actions": {
+      "groups": {
+        "security": [
+          "read",
+          "annotate",
+          "managedXrayMeta"
+        ]
+      }
+    }
+  },
+  "build": {
+    "repositories": [
+      "artifactory-build-info"
+    ],
+    "actions": {
+      "groups": {
+        "security": [
+          "read",
+          "annotate",
+          "managedXrayMeta"
+        ]
+      }
+    }
+  }
+}

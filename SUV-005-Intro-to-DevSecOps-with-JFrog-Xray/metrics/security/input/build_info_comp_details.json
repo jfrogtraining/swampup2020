@@ -1,0 +1,9 @@
+{
+    "violations": true,
+    "license": true,
+    "security": true,
+    "exclude_unknown": false,
+    "component_name": "app_mvn_pipeline:8",
+    "package_type": "build",
+    "output_format": "json"
+}

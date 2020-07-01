@@ -1,0 +1,14 @@
+{
+    "rclass" : "local",
+    "packageType": "maven",
+    "description": "My local repository for snapshots",
+    "includesPattern": "**/*",
+    "excludesPattern": "",
+    "repoLayoutRef" : "maven-2-default",
+    "checksumPolicyType": "client-checksums",
+    "handleReleases": false,
+    "handleSnapshots": true,
+    "suppressPomConsistencyChecks": false,
+    "blackedOut": false,
+    "archiveBrowsingEnabled" : false
+}

@@ -1,0 +1,53 @@
+{
+  "repo": {
+    "repositories": [
+      "asgardian-pypi-remote",
+      "asgardian-python-prod-local",
+      "asgardian-python-dev-local",
+      "asgardian-python-uat-local"
+    ],
+    "actions": {
+      "groups": {
+        "asgardian-reader": [
+          "read"
+        ],
+        "asgardian-dev": [
+          "read"
+        ],
+        "asgardian-delivery": [
+          "read"
+        ],
+        "security": [
+          "read"
+        ],
+        "ops": [
+          "read"
+        ]
+      }
+    }
+  },
+  "build": {
+    "repositories": [
+      "artifactory-build-info"
+    ],
+    "actions": {
+      "groups": {
+        "asgardian-reader": [
+          "read"
+        ],
+        "asgardian-dev": [
+          "read"
+        ],
+        "asgardian-delivery": [
+          "read"
+        ],
+        "security": [
+          "read"
+        ],
+        "ops": [
+          "read"
+        ]
+      }
+    }
+  }
+}

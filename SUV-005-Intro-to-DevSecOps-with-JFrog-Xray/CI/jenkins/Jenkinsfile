@@ -1,0 +1,78 @@
+pipeline {
+    
+    agent any 
+    
+    environment {
+        // reference to the maven installation name and Artifactory name configured in Jenkins 
+        MVN_INSTALL = 'MVN_363'
+        ARTY_ID = 'orbitera-suv'
+    }
+
+    parameters {
+        string(name: 'ARTY_MAIN_REPO', defaultValue: 'ninja-mvn-dev', description: '')
+    }
+    
+    stages {
+        stage('Configure project') {
+            steps {
+                git branch: 'master', url: <CHANGE_ME> 
+
+                rtMavenResolver (
+                    id: "arty1-resolver",
+                    serverId: "$ARTY_ID",
+                    releaseRepo: "${params.ARTY_MAIN_REPO}",
+                    snapshotRepo: "${params.ARTY_MAIN_REPO}"
+                )
+                
+                rtMavenDeployer (
+                    id: "arty1-deployer",
+                    serverId: "$ARTY_ID",
+                    releaseRepo: "${params.ARTY_MAIN_REPO}",
+                    snapshotRepo: "${params.ARTY_MAIN_REPO}"
+                )
+            
+                rtBuildInfo (
+                    captureEnv: true
+                )   
+            }
+        }
+        
+        stage('Build project') {
+            steps {
+                    rtMavenRun (
+                        tool: "${env.MVN_INSTALL}",
+                        pom: "complete/pom.xml",
+                        goals: "clean -U package",
+                        // Maven options.
+                        resolverId: "arty1-resolver",
+                        deployerId: "arty1-deployer"
+                    )
+            }
+        }
+
+        stage('Unit tests') {
+            steps {
+                sh "echo Test project"
+            }    
+            
+        }
+        
+        stage('Publish Build Info') {
+            steps {
+
+                rtPublishBuildInfo (
+                    serverId: "$ARTY_ID"
+                )
+            }
+        } // end Publish Build Info
+
+        stage ('Xray scan') {
+            steps {
+                xrayScan (
+                    serverId: "$ARTY_ID",
+                    failBuild: false
+                )
+            }
+        }
+    }
+}

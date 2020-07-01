@@ -1,0 +1,38 @@
+{
+  "repo": {
+    "repositories": [
+      "ninja-mvn-prod-local",
+      "ninja-mvn-ppr-local",
+      "ninja-mvn-uat-local",
+      "asgardian-python-prod-local",
+      "asgardian-python-uat-local"
+    ],
+    "actions": {
+      "groups": {
+        "ops": [
+          "read",
+          "write",
+          "annotate",
+          "delete",
+          "managedXrayMeta"
+        ]
+      }
+    }
+  },
+  "build": {
+    "repositories": [
+      "artifactory-build-info"
+    ],
+    "actions": {
+      "groups": {
+        "ops": [
+          "read",
+          "write",
+          "annotate",
+          "delete",
+          "managedXrayMeta"
+        ]
+      }
+    }
+  }
+}

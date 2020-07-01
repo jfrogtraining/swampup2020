@@ -1,0 +1,103 @@
+{
+    "general_data": {
+        "name": "sec",
+        "description": "this watch is for demo",
+        "active": true
+    },
+    "project_resources": {
+        "resources": [
+            {
+                "type": "repository",
+                "bin_mgr_id": "default",
+                "name": "ninja-mvn-prod-local",
+                "repo_type": "local"
+            },
+            {
+                "type": "repository",
+                "bin_mgr_id": "default",
+                "name": "ninja-mvn-ppr-local",
+                "repo_type": "local"
+            },
+            {
+                "type": "repository",
+                "bin_mgr_id": "default",
+                "name": "ninja-mvn-uat-local",
+                "repo_type": "local"
+            },
+            {
+                "type": "repository",
+                "bin_mgr_id": "default",
+                "name": "ninja-mvn-release-local",
+                "repo_type": "local"
+            },
+            {
+                "type": "repository",
+                "bin_mgr_id": "default",
+                "name": "ninja-mvn-rc-local",
+                "repo_type": "local"
+            },
+            {
+                "type": "repository",
+                "bin_mgr_id": "default",
+                "name": "ninja-mvn-snapshot-local",
+                "repo_type": "local"
+            },
+            {
+                "type": "repository",
+                "bin_mgr_id": "default",
+                "name": "ninja-jcenter-remote",
+                "repo_type": "remote"
+            },
+            {
+                "type": "repository",
+                "bin_mgr_id": "default",
+                "name": "ninja-npmjs-remote",
+                "repo_type": "remote"
+            },
+            {
+                "type": "repository",
+                "bin_mgr_id": "default",
+                "name": "asgardian-python-dev-local",
+                "repo_type": "local"
+            },
+            {
+                "type": "repository",
+                "bin_mgr_id": "default",
+                "name": "asgardian-python-uat-local",
+                "repo_type": "local"
+            },
+            {
+                "type": "repository",
+                "bin_mgr_id": "default",
+                "name": "asgardian-python-prod-local",
+                "repo_type": "local"
+            },
+            {
+                "type": "repository",
+                "bin_mgr_id": "default",
+                "name": "asgardian-pypi-remote",
+                "repo_type": "remote"
+            },
+            {
+                "type": "all-builds",
+                "name": "All Builds",
+                "bin_mgr_id": "default"
+            }
+        ]
+    },
+    "assigned_policies": [
+        {
+            "name": "demo-security",
+            "type": "security"
+        }
+    ]
+}
+        ]
+    },
+    "assigned_policies": [
+        {
+            "name": "demo-security",
+            "type": "security"
+        }
+    ]
+}

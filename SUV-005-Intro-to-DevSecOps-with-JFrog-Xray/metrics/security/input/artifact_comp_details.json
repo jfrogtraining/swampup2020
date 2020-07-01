@@ -1,0 +1,9 @@
+{
+    "violations": true,
+    "license": true,
+    "security": true,
+    "exclude_unknown": false,
+    "component_name": "gradle-app:1.1.15",
+    "package_type": "docker",
+    "output_format": "json"
+}

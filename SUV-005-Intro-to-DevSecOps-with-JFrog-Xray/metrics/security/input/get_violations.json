@@ -1,0 +1,11 @@
+{
+    "filters": {
+        "watch_name": "sec",
+        "min_severity": "Medium"
+    },
+    "pagination": {
+        "order_by": "updated",
+        "limit": 1000,
+        "offset": 1
+    }
+}

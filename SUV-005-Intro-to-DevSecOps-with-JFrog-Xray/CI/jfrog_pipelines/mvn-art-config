@@ -1,0 +1,10 @@
+version: 1
+type: maven 
+resolver:
+  serverID: artifactory
+  snapshotRepo: ninja-mvn-dev
+  releaseRepo: ninja-mvn-dev
+deployer:
+  serverID: artifactory
+  snapshotRepo: ninja-mvn-dev
+  releaseRepo: ninja-mvn-dev

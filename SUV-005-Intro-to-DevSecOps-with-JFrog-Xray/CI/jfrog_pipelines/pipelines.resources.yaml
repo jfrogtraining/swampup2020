@@ -1,0 +1,45 @@
+resources:
+
+# mvn PIPELINE
+  - name: src_code_back_app
+    type: GitRepo
+    configuration:
+      files:
+        include: ^complete\/.+
+        exclude: ^complete\/CI\/.+
+      gitProvider: ych_github
+      path: cyan21/gs-multi-module
+      branches:
+        include: jfrog
+
+# DOCKER PIPELINE
+  - name: src_dockerfile_back_app
+    type: GitRepo
+    configuration:
+      files:
+        include: ^complete\/CI\/Docker\/Dockerfile      
+      gitProvider: ych_github
+      path: cyan21/gs-multi-module
+      branches:
+        include: jfrog
+
+  # Build info for the published mvn App
+  - name: back_appBuildInfo
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: artifactory
+      buildName: back_app_mvn_pipeline
+      buildNumber: ${run_number}
+
+  - name: back_appBuildInfo_scanned
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: artifactory
+      buildName: back_app_mvn_pipeline
+      buildNumber: '${run_number}'
+
+  # - name: build_info_back_app_promoted_staging
+  #   type: BuildInfo
+  #   configuration:
+  #     sourceArtifactory: artifactory
+

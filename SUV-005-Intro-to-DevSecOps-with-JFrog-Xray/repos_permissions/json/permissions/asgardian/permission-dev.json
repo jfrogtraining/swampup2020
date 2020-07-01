@@ -1,0 +1,39 @@
+{
+  "repo": {
+    "repositories": [
+      "asgardian-pypi-remote",
+      "asgardian-python-dev-local"
+    ],
+    "actions": {
+      "groups": {
+        "asgardian-dev": [
+          "read",
+          "write",
+          "delete",
+          "annotate",
+          "managedXrayMeta"
+        ]
+      }
+    }
+  },
+  "build": {
+    "include-patterns": [
+      "*python*/**",
+      "*pip*/**"
+    ],
+    "repositories": [
+      "artifactory-build-info"
+    ],
+    "actions": {
+      "groups": {
+        "asgardian-dev": [
+          "read",
+          "write",
+          "annotate",
+          "delete",
+          "managedXrayMeta"
+        ]
+      }
+    }
+  }
+}

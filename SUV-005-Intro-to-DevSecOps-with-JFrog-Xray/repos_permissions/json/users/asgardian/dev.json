@@ -1,0 +1,10 @@
+{
+    "password": "chaysinh",
+    "admin": false,
+    "profileUpdatable": true,
+    "groups": [
+        "asgardian-reader",
+        "asgardian-dev"
+    ],
+    "email": "null@jfrog.com"
+}
