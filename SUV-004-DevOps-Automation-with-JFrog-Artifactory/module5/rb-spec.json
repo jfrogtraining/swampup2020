@@ -1,7 +1,7 @@
 {
     "files": [
       {
-        "pattern": "docker-prod-local/jfrog-docker-app/1/**"
+        "pattern": "docker-prod-local/jfrog-docker-app/${BUILD_NUMBER}/**"
       },
       {
         "pattern":"helm-local/**",

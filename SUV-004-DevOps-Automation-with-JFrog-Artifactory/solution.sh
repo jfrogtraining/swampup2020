@@ -163,7 +163,7 @@ jfrog rt dl --spec framework-download.json --build-name=docker-framework --build
 #we are dev
 jfrog rt use orbitera
 #For now use my own fork with insecure mode in it
-./jfrog1 rt dpl $ARTIFACTORY_URL/docker-virtual/openjdk:11-jdk-slim-buster docker-virtual --build-name=docker-framework --build-number=$BUILD_NUMBER --module=framework
+./jfrog1 rt dpl $ARTIFACTORY_URL/docker-virtual/openjdk:11-jdk docker-virtual --build-name=docker-framework --build-number=$BUILD_NUMBER --module=framework
 
 
 docker build . -t $ARTIFACTORY_URL/docker-virtual/jfrog-docker-framework:$IMAGE_TAG -f Dockerfile --build-arg REGISTRY=$ARTIFACTORY_URL/docker-virtual
@@ -241,7 +241,7 @@ curl -uadmin:$ADMIN_PASSWORD -X PUT http://$ARTIFACTORY_URL/artifactory/api/v2/s
 jfrog rt rbc myApp 1.0.$BUILD_NUMBER --sign=true --spec=$SCRIPT_DIR/module5/rb-spec.json --spec-vars BUILD_NUMBER=$BUILD_NUMBER
 
 #need to create target repositories for distribution on edge
-export EDGE_URL=35.202.21.252:8082
+export EDGE_URL=<edgeUrl>
 
 curl -uadmin:$ADMIN_PASSWORD -X PATCH  http://$EDGE_URL/artifactory/api/system/configuration -T $SCRIPT_DIR/module1/repo.yaml
 
@@ -252,15 +252,13 @@ jfrog rt rbd myApp 1.0.$BUILD_NUMBER --dist-rules=$SCRIPT_DIR/module5/dist-rules
 
 #maintenance
 
-# Find the latest released artifacts from specific build
-curl -uadmin:$ADMIN_PASSWORD -X POST http://$ARTIFACTORY_URL/artifactory/api/search/aql -T $SCRIPT_DIR/module6/largestFile.aql
 
 #AQl to find all archive with specific jar in it
- curl -uadmin:$ADMIN_PASSWORD -X POST http://$ARTIFACTORY_URL/artifactory/api/search/aql -T $SCRIPT_DIR/module6/junitfilter.aql
+curl -uadmin:$ADMIN_PASSWORD -X POST http://$ARTIFACTORY_URL/artifactory/api/search/aql -T $SCRIPT_DIR/module6/junitfilter.aql
 
-#AQL for cleanup
+#AQL for stats
 curl -uadmin:$ADMIN_PASSWORD -X POST http://$ARTIFACTORY_URL/artifactory/api/search/aql -T $SCRIPT_DIR/module6/stats.aql
 
 curl -uadmin:$ADMIN_PASSWORD -X POST http://$ARTIFACTORY_URL/artifactory/api/search/aql -T $SCRIPT_DIR/module6/largestFile.aql
 #or
-jfrog rt s --spec $SCRIPT_DIR/module5/cleanup.spec
+jfrog rt s --spec $SCRIPT_DIR/module6/cleanup.spec

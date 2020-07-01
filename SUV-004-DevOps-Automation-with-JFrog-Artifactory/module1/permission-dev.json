@@ -1,6 +1,6 @@
   {
     "repo" : {
-      "repositories": ["gradle-dev-local","jcenter","docker-dev-local","docker-remote","helm-local","helm-remote"],
+      "repositories": ["gradle-dev-local","jcenter","docker-dev-local","docker-remote","helm-local","helm-remote", "tomcat-local"],
       "actions": {
           "groups" : {
             "dev-team" : ["write","annotate", "read"],
