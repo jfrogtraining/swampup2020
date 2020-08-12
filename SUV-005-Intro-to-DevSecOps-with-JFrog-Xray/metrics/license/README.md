@@ -27,16 +27,15 @@ build_number="36"
 
 ```
 ./license.sh 
-
-# OR 
+// OR 
 ./license.sh -r http://artifactory.mydomain.com/xray/api/v1 -u yann -p yann
+```
 
 ## Build level 
 
 ```
 ./license.sh -b 
-
-# OR 
+// OR 
 ./license.sh -b -r http://artifactory.mydomain.com/xray/api/v1 -u yann -p yann
 ```
 
